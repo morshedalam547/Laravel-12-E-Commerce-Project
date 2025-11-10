@@ -157,29 +157,38 @@
                             </svg>
                         </button>
                     </h5>
-
                     <div id="accordion-filter-brand" class="accordion-collapse collapse show border-0"
                         aria-labelledby="accordion-heading-brand" data-bs-parent="#brand-filters">
                         <div class="search-field multi-select accordion-body px-0 pb-0">
-                            <div class="search-field__input-wrapper mb-3">
-                                <input type="text" id="brandSearch"
-                                    class="search-field__input form-control form-control-sm border-light border-2"
-                                    placeholder="Search brand..." />
-                            </div>
 
-                            {{-- <ul id="brandList" class="multi-select__list list-unstyled">
+                            <ul id="brandList" class="list-unstyled mb-0 brand-list">
+                            
+                                <li class="list-item d-flex justify-content-between align-items-center py-1">
+                                    <label class="menu-link d-flex align-items-center gap-2 mb-0">
+                                        <input type="checkbox" name="brands" value="all" class="chk-brand"
+                                            {{ request('p_brand') == null ? 'checked' : '' }}
+                                            onchange="window.location='{{ route('shop.index') }}'">
+                                        All
+                                    </label>
+                                </li>
+
+                                {{-- ✅ Brand List --}}
                                 @foreach($brands as $brand)
-                                    <li class="search-suggestion__item multi-select__item js-search-select js-multi-select">
-                                        <a href="{{ route('shop.index', array_merge(request()->all(), ['brand' => $brand->id])) }}"
-                                            class="d-flex justify-content-between text-decoration-none @if(request('brand') == $brand->id) text-primary fw-bold @else text-dark @endif">
-                                            <span>{{ $brand->name }}</span>
-                                            <span class="text-secondary">{{ $brand->products_count ?? 0 }}</span>
-                                        </a>
+                                    <li class="list-item d-flex justify-content-between align-items-center  py-1">
+                                        <label class="menu-link d-flex align-items-center gap-2 mb-0">
+                                            <input type="checkbox" name="brands" value="{{ $brand->id }}" class="chk-brand"
+                                                onchange="window.location='{{ route('shop.index', array_merge(request()->all(), ['p_brand' => $brand->id])) }}'"
+                                                {{ request('p_brand') == $brand->id ? 'checked' : '' }}>
+                                            {{ $brand->name }}
+                                        </label>
+                                        <span class="text-muted small">{{ $brand->products->count() }}</span>
                                     </li>
                                 @endforeach
-                            </ul> --}}
+                            </ul>
+
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -223,18 +232,18 @@
 
         <div class="shop-list flex-grow-1">
             <div class="swiper-container js-swiper-slider slideshow slideshow_small slideshow_split" data-settings='{
-                            "autoplay": {
-                              "delay": 5000
-                            },
-                            "slidesPerView": 1,
-                            "effect": "fade",
-                            "loop": true,
-                            "pagination": {
-                              "el": ".slideshow-pagination",
-                              "type": "bullets",
-                              "clickable": true
-                            }
-                          }'>
+                                "autoplay": {
+                                  "delay": 5000
+                                },
+                                "slidesPerView": 1,
+                                "effect": "fade",
+                                "loop": true,
+                                "pagination": {
+                                  "el": ".slideshow-pagination",
+                                  "type": "bullets",
+                                  "clickable": true
+                                }
+                              }'>
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="slide-split h-100 d-block d-md-flex overflow-hidden">
@@ -322,30 +331,39 @@
                     <a href="#" class="menu-link menu-link_us-s text-uppercase fw-medium">The Shop</a>
                 </div>
 
-                <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1 gap-3">
-                    
-             <form method="GET" id="filterForm" class="d-flex justify-content-between mb-3 gap-3">
-                
+                <div
+                    class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1 gap-3">
 
-    <!-- 🔽 Sorting -->
-  <select name="sort" onchange="document.getElementById('filterForm').submit();" class="form-select w-auto">
-        <option value="">Default Sorting</option>
-        <option value="new_to_old" {{ request('sort')=='new_to_old' ? 'selected' : '' }}>Newest to Oldest</option>
-        <option value="old_to_new" {{ request('sort')=='old_to_new' ? 'selected' : '' }}>Oldest to Newest</option>
-        <option value="price_asc" {{ request('sort')=='price_asc' ? 'selected' : '' }}>Price: Low to High</option>
-        <option value="price_desc" {{ request('sort')=='price_desc' ? 'selected' : '' }}>Price: High to Low</option>
-        <option value="name_asc" {{ request('sort')=='name_asc' ? 'selected' : '' }}>Name: A to Z</option>
-        <option value="name_desc" {{ request('sort')=='name_desc' ? 'selected' : '' }}>Name: Z to A</option>
-    </select>
-    
-    <!-- 🔽 Per page -->
-    <select name="size" onchange="document.getElementById('filterForm').submit();" class="form-select w-auto">
-        <option value="4" {{ request('size')==4 ? 'selected' : '' }}>4 per page</option>
-        <option value="8" {{ request('size')==8 ? 'selected' : '' }}>8 per page</option>
-        <option value="12" {{ request('size')==12 ? 'selected' : '' }}>12 per page</option>
-        <option value="16" {{ request('size')==16 ? 'selected' : '' }}>16 per page</option>
-    </select>
-</form>
+                    <form method="GET" id="filterForm" class="d-flex justify-content-between mb-3 gap-3">
+
+
+                        <!-- 🔽 Sorting -->
+                        <select name="sort" onchange="document.getElementById('filterForm').submit();"
+                            class="form-select w-auto">
+                            <option value="">Default Sorting</option>
+                            <option value="new_to_old" {{ request('sort') == 'new_to_old' ? 'selected' : '' }}>Newest to
+                                Oldest</option>
+                            <option value="old_to_new" {{ request('sort') == 'old_to_new' ? 'selected' : '' }}>Oldest to
+                                Newest</option>
+                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to
+                                High</option>
+                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to
+                                Low</option>
+                            <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Name: A to Z
+                            </option>
+                            <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Name: Z to A
+                            </option>
+                        </select>
+
+                        <!-- 🔽 Per page -->
+                        <select name="size" onchange="document.getElementById('filterForm').submit();"
+                            class="form-select w-auto">
+                            <option value="4" {{ request('size') == 4 ? 'selected' : '' }}>4 per page</option>
+                            <option value="8" {{ request('size') == 8 ? 'selected' : '' }}>8 per page</option>
+                            <option value="12" {{ request('size') == 12 ? 'selected' : '' }}>12 per page</option>
+                            <option value="16" {{ request('size') == 16 ? 'selected' : '' }}>16 per page</option>
+                        </select>
+                    </form>
 
                     <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
 
@@ -373,7 +391,7 @@
 
             {{-- products-grid --}}
             <div class="products-grid row row-cols-2 row-cols-md-3" id="products-grid">
- 
+
                 @foreach($products as $product)
                     <div class="col-lg-3 col-md-6 col-sm-8 mb-4">
                         <div class="product-card-wrapper h-100">
@@ -421,20 +439,24 @@
                                     </div>
 
                                     {{-- Add to card or Go to Cart --}}
-                                        @if (Cart::instance('cart')->content()->where('id',$product->id)->count()>0)
-                                    <a href="{{ route('cart.index') }}" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium btn-warning mb-3">Go to Cart</a>
+                                    @if (Cart::instance('cart')->content()->where('id', $product->id)->count() > 0)
+                                        <a href="{{ route('cart.index') }}"
+                                            class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium btn-warning mb-3">Go
+                                            to Cart</a>
                                     @else
-                                      <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
-                                        @csrf
-                                <input type="hidden" name="id" value="{{ $product->id }}"/>
-                                <input type="hidden" name="quantity" value="1"/>
-                            <input type="hidden" name="name" value="{{ $product->name }}"/>
-                            <input type="hidden" name="price" value="{{ $product->sale_price == '' ?  $product->regular_price: $product->sale_price }}"/>
-                 
-                                       <button type="sumbit" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium  "
-                                        title="Add To Cart" data-aside="cartDrawer"> Add To Cart </button>
+                                        <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $product->id }}" />
+                                            <input type="hidden" name="quantity" value="1"/>
+                                            <input type="hidden" name="name" value="{{ $product->name }}" />
+                                            <input type="hidden" name="price"
+                                                value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}" />
+
+                                            <button type="sumbit"
+                                                class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium  "
+                                                title="Add To Cart" data-aside="cartDrawer"> Add To Cart </button>
                                         </form>
-                                        @endif
+                                    @endif
 
                                 </div>
 
@@ -455,10 +477,10 @@
                                                 </a>
                                             </h6>
                                             @if($product->sale_price)
-                                            <span class="money price price-old">${{ $product->regular_price }}</span>
+                                                <span class="money price price-old">${{ $product->regular_price }}</span>
 
                                                 <span class="money price price-sale">${{ $product->sale_price }}</span>
-                                                
+
                                             @else
                                                 <span class="money price price-old">${{ $product->regular_price }}</span>
                                             @endif

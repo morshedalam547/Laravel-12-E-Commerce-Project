@@ -11,18 +11,21 @@ class ShopController extends Controller
 {
 public function index(Request $request)
 {
-    // ✅ প্রতি পেজে কতগুলো product দেখাবে
-    $size = $request->query('size') ? $request->query('size') : 4;
-
-    // ✅ Sorting option
+    $size = $request->query('size', 4);
     $sort = $request->query('sort');
+    $p_brand = $request->query('p_brand');
 
     $query = Product::query();
 
+    // ✅ Brand filter
+    if ($p_brand && $p_brand !== 'all') {
+        $query->where('brand_id', $p_brand);
+    }
+
+    // ✅ Sorting
     if ($sort) {
         switch ($sort) {
             case 'price_asc':
-                // যদি sale_price থাকে তাহলে ওটা, না থাকলে regular_price
                 $query->orderByRaw('COALESCE(sale_price, regular_price) ASC');
                 break;
 
@@ -37,7 +40,8 @@ public function index(Request $request)
             case 'name_desc':
                 $query->orderBy('name', 'desc');
                 break;
-                  case 'old_to_new':
+
+            case 'old_to_new':
                 $query->orderBy('created_at', 'asc');
                 break;
 
@@ -53,11 +57,15 @@ public function index(Request $request)
         $query->orderBy('created_at', 'desc');
     }
 
-    // ✅ Pagination সহ query
+    // ✅ Load brands
+    $brands = Brand::orderBy('name', 'asc')->withCount('products')->get();
+
+    // ✅ Paginate
     $products = $query->paginate($size)->appends($request->all());
 
-    return view('shop.shop', compact('products', 'size', 'sort'));
+    return view('shop.shop', compact('products', 'brands', 'size', 'sort', 'p_brand'));
 }
+
 
 
     public function product_details($product_slug)
