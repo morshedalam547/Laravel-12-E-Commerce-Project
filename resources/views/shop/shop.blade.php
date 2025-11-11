@@ -68,6 +68,56 @@
                 </div>
             </div>
 
+{{-- Category --}}
+        <div class="accordion" id="category-filters">
+                <div class="accordion-item mb-4 pb-3">
+                    <h5 class="accordion-header" id="accordion-heading-brand">
+                        <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#accordion-filter-brand" aria-expanded="true"
+                            aria-controls="accordion-filter-brand">
+                            Category
+                            <svg class="accordion-button__icon type2" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
+                                    <path
+                                        d="M5.35668 0.159286C5.16235 -0.053094 4.83769 -0.0530941 4.64287 0.159286L0.147611 5.05963C-0.0492049 5.27473 -0.049205 5.62357 0.147611 5.83813C0.344427 6.05323 0.664108 6.05323 0.860924 5.83813L5 1.32706L9.13858 5.83867C9.33589 6.05378 9.65507 6.05378 9.85239 5.83867C10.0492 5.62357 10.0492 5.27473 9.85239 5.06018L5.35668 0.159286Z" />
+                                </g>
+                            </svg>
+                        </button>
+                    </h5>
+                    <div id="accordion-filter-brand" class="accordion-collapse collapse show border-0"
+                        aria-labelledby="accordion-heading-brand" data-bs-parent="#category-filters">
+                        <div class="search-field multi-select accordion-body px-0 pb-0">
+
+                            <ul id="brandList" class="list-unstyled mb-0 brand-list">
+                            
+                                <li class="list-item d-flex justify-content-between align-items-center py-1">
+                                    <label class="menu-link d-flex align-items-center gap-2 mb-0">
+                                        <input type="checkbox" name="categories" value="all" class="chk-brand"
+                                            {{ request('p_category') == null ? 'checked' : '' }}
+                                            onchange="window.location='{{ route('shop.index') }}'">
+                                        All
+                                    </label>
+                                </li>
+
+                                {{-- ✅ CategoryList --}}
+                                @foreach($categories as $category)
+                                    <li class="list-item d-flex justify-content-between align-items-center  py-1">
+                                        <label class="menu-link d-flex align-items-center gap-2 mb-0">
+                                            <input type="checkbox" name="categories" value="{{ $category->id }}" class="chk-brand"
+                                                onchange="window.location='{{ route('shop.index', array_merge(request()->all(), ['p_category' => $category->id])) }}'"
+                                                {{ request('p_category') == $category->id ? 'checked' : '' }}>
+                                            {{ $category->name }}
+                                        </label>
+                                        <span class="text-muted small">{{ $category->products->count() }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
 
             {{-- Colors --}}
             <div class="accordion" id="color-filters">
@@ -193,40 +243,47 @@
             </div>
 
 
-            {{-- Price --}}
+            {{-- Price Range Start --}}
 
             <div class="accordion" id="price-filters">
-                <div class="accordion-item mb-4">
-                    <h5 class="accordion-header mb-2" id="accordion-heading-price">
-                        <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#accordion-filter-price" aria-expanded="true"
-                            aria-controls="accordion-filter-price">
-                            Price
-                            <svg class="accordion-button__icon type2" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
-                                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                                    <path
-                                        d="M5.35668 0.159286C5.16235 -0.053094 4.83769 -0.0530941 4.64287 0.159286L0.147611 5.05963C-0.0492049 5.27473 -0.049205 5.62357 0.147611 5.83813C0.344427 6.05323 0.664108 6.05323 0.860924 5.83813L5 1.32706L9.13858 5.83867C9.33589 6.05378 9.65507 6.05378 9.85239 5.83867C10.0492 5.62357 10.0492 5.27473 9.85239 5.06018L5.35668 0.159286Z" />
-                                </g>
-                            </svg>
-                        </button>
-                    </h5>
-                    <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
-                        aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-                        <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="10"
-                            data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]" data-currency="$" />
-                        <div class="price-range__info d-flex align-items-center mt-2">
-                            <div class="me-auto">
-                                <span class="text-secondary">Min Price: </span>
-                                <span class="price-range__min">$250</span>
-                            </div>
-                            <div>
-                                <span class="text-secondary">Max Price: </span>
-                                <span class="price-range__max">$450</span>
-                            </div>
-                        </div>
+            <div class="accordion-item mb-4">
+            <h5 class="accordion-header mb-2" id="accordion-heading-price">
+                <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#accordion-filter-price"
+                    aria-expanded="true" aria-controls="accordion-filter-price">
+                    Price
+                    <svg class="accordion-button__icon type2" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                        <g aria-hidden="true" stroke="none" fill-rule="evenodd">
+                            <path
+                                d="M5.35668 0.159286C5.16235 -0.053094 4.83769 -0.0530941 4.64287 0.159286L0.147611 5.05963C-0.0492049 5.27473 -0.049205 5.62357 0.147611 5.83813C0.344427 6.05323 0.664108 6.05323 0.860924 5.83813L5 1.32706L9.13858 5.83867C9.33589 6.05378 9.65507 6.05378 9.85239 5.83867C10.0492 5.62357 10.0492 5.27473 9.85239 5.06018L5.35668 0.159286Z" />
+                        </g>
+                    </svg>
+                </button>
+            </h5>
+
+            <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
+                aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
+
+                {{-- ✅ Price Range Slider --}}
+                <input id="priceRange" class="price-range-slider" type="text" name="price_range"
+                    data-slider-min="1" data-slider-max="5000" data-slider-step="5"
+                    data-slider-value="[{{ $min_price }}, {{ $max_price }}]" data-currency="$" />
+
+                <div class="price-range__info d-flex align-items-center mt-2">
+                    <div class="me-auto">
+                        <span class="text-secondary">Min Price: </span>
+                        <span id="minPrice" class="price-range__min">$1</span>
+                    </div>
+                    <div>
+                        <span class="text-secondary">Max Price: </span>
+                        <span id="maxPrice" class="price-range__max">$5000</span>
                     </div>
                 </div>
             </div>
+        </div>
+            </div>
+
+  {{-- Price Range End --}}
 
         </div>
 
@@ -532,6 +589,20 @@
     </section>
 
 
+{{-- Price Filter work --}}
+<form id="frmfilter" method="GET" action="{{ route('shop.index') }}">
+    <input type="hidden" name="min" id="hdMinPrice" value="{{ $min_price }}"/>
+    <input type="hidden" name="max" id="hdMaxPrice" value="{{ $max_price }}"/>
+    
+</form>
+
+@endsection
+
+
+
+@push('scripts')
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const sliders = document.querySelectorAll('.js-swiper-slider');
@@ -548,7 +619,27 @@
                 });
             });
         });
+
+
+
+
+// Price Filter work Script start
+        $(function(){
+            $("[name='price_range']").on("change",function(){
+                var min =$(this).val().split(',')[0];
+                var max =$(this).val().split(',')[1];
+                $("#hdMinPrice").val(min);
+                $("#hdMaxPrice").val(max);
+                setTimeout(function(){
+                    $("#frmfilter").submit();
+                },2000);
+            });
+        });
+
+// Price Filter work Script End
+
+
+
     </script>
-
-
-@endsection
+    
+@endpush

@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
@@ -29,6 +30,8 @@ Route::put('/cart/increase-Quantity/{rowId}',[CartController::class,'increase_ca
 Route::put('/cart/decrease-Quantity/{rowId}',[CartController::class,'decrease_cart_quantity'])->name('cart.qty.decrease');
 Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::delete('/cart/clear/', [CartController::class, 'empty_cart'])->name('cart.empty');
+
+Route::get('/wishlist', [WishController::class, 'wish_index'])->name('wishlist');
 
 
 require __DIR__.'/auth.php';
