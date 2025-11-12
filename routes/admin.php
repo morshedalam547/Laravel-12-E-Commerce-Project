@@ -5,9 +5,6 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
-
-
-
 // Admin Dashboard (only for admin)
 Route::middleware(['auth', 'admin'])->group(function () {
 
@@ -33,19 +30,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     
   // সব products দেখার জন্য
-Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
+    Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
 
-// Add Product form দেখানোর জন্য
-Route::get('/admin/products/add', [AdminController::class, 'products_add'])->name('admin.products.add');
+    // Add Product form দেখানোর জন্য
+    Route::get('/admin/products/add', [AdminController::class, 'products_add'])->name('admin.products.add');
 
-// Product save করার জন্য (POST)
-Route::post('/admin/products/store', [AdminController::class, 'products_store'])->name('admin.products.store');
+    // Product save করার জন্য (POST)
+    Route::post('/admin/products/store', [AdminController::class, 'products_store'])->name('admin.products.store');
 
-Route::get('/admin/products/view/{id}', [AdminController::class, 'viewProduct'])->name('admin.products.view');
-Route::get('/admin/products/edit/{id}', [AdminController::class, 'editProduct'])->name('admin.products.edit');
-Route::put('/admin/products/update/{id}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
+    Route::get('/admin/products/view/{id}', [AdminController::class, 'viewProduct'])->name('admin.products.view');
+    Route::get('/admin/products/edit/{id}', [AdminController::class, 'editProduct'])->name('admin.products.edit');
+    Route::put('/admin/products/update/{id}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
 
-Route::delete('/admin/products/delete/{id}', [AdminController::class, 'deleteProduct'])->name('admin.products.delete');
+    Route::delete('/admin/products/delete/{id}', [AdminController::class, 'deleteProduct'])->name('admin.products.delete');
 
 
 

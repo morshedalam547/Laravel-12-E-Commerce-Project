@@ -542,14 +542,51 @@
                                                 <span class="money price price-old">${{ $product->regular_price }}</span>
                                             @endif
 
-                                            <button
-                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                                title="Add To Wishlist">
-                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <use href="#icon_heart" />
-                                                </svg>
-                                            </button>
+                                            {{-- <form action="{{ route('wishlist.add', $product->id) }}" method="GET">
+                                                <button type="submit"
+                                                    class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0"
+                                                    title="Add To Wishlist">
+                                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <use href="#icon_heart" />
+                                                    </svg>
+                                                </button>
+                                            </form> --}}
+
+
+                                                @php
+                                                    $session_id = session()->getId();
+                                                    $inWishlist = \App\Models\Wishlist::where('session_id', $session_id)
+                                                                    ->where('product_id', $product->id)
+                                                                    ->exists();
+                                                @endphp
+
+                                                @if ($inWishlist)
+                                                    {{-- ❤️ Remove --}}
+                                                    <form action="{{ route('wishlist.remove', $product->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0"
+                                                            title="Remove from Wishlist">
+                                                            <svg width="18" height="18" viewBox="0 0 20 20" fill="red" xmlns="http://www.w3.org/2000/svg">
+                                                                <use href="#icon_heart" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    {{-- 🤍 Add --}}
+                                                    <form action="{{ route('wishlist.add', $product->id) }}" method="GET" class="d-inline">
+                                                        <button type="submit"
+                                                            class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0"
+                                                            title="Add To Wishlist">
+                                                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="#333" xmlns="http://www.w3.org/2000/svg">
+                                                                <use href="#icon_heart" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                @endif
+
 
 
                                         </div>

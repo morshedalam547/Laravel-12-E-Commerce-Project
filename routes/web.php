@@ -1,23 +1,20 @@
 <?php
 
 
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WishlistController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 // Shop Route
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
@@ -31,7 +28,22 @@ Route::put('/cart/decrease-Quantity/{rowId}',[CartController::class,'decrease_ca
 Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::delete('/cart/clear/', [CartController::class, 'empty_cart'])->name('cart.empty');
 
-Route::get('/wishlist', [WishController::class, 'wish_index'])->name('wishlist');
+//Wishlist Route
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+Route::get('/wishlist/add/{product_id}', [WishlistController::class, 'store'])->name('wishlist.add');
+Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+
+
+
+
+
+
+
+
+
+
+
 
 
 require __DIR__.'/auth.php';

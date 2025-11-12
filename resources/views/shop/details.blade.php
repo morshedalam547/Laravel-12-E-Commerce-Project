@@ -151,10 +151,47 @@
 
 
           <div class="product-single__addtolinks">
-            <a href="#" class="menu-link menu-link_us-s add-to-wishlist"><svg width="16" height="16" viewBox="0 0 20 20"
-                fill="none" xmlns="http://www.w3.org/2000/svg">
+
+
+  @php
+    $session_id = session()->getId();
+    $inWishlist = \App\Models\Wishlist::where('session_id', $session_id)
+                    ->where('product_id', $product->id)
+                    ->exists();
+@endphp
+
+@if($inWishlist)
+    {{-- ❤️ Remove from Wishlist --}}
+    <form action="{{ route('wishlist.remove', $product->id) }}" method="POST" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="menu-link menu-link_us-s add-to-wishlist d-flex align-items-center bg-transparent border-0 p-0" title="Remove from Wishlist">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="red" xmlns="http://www.w3.org/2000/svg">
                 <use href="#icon_heart" />
-              </svg><span>Add to Wishlist</span></a>
+            </svg>
+            <span class="ms-1 fs-5">Remove from Wishlist</span>
+        </button>
+    </form>
+@else
+    {{-- 🤍 Add to Wishlist --}}
+    <form action="{{ route('wishlist.add', $product->id) }}" method="GET" class="d-inline">
+        <button type="submit" class="menu-link menu-link_us-s add-to-wishlist d-flex align-items-center top-0 end-0  bg-transparent border-0 p-0 gap-2" title="Add to Wishlist">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#333" xmlns="http://www.w3.org/2000/svg">
+                <use href="#icon_heart" />
+            </svg>
+            <span class="ms-1 fs-5 fw-medium">Add to Wishlist</span>
+
+
+        </button>
+    </form>
+@endif
+
+
+
+
+
+
+
             <share-button class="share-button">
               <button class="menu-link menu-link_us-s to-share border-0 bg-transparent d-flex align-items-center">
                 <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
