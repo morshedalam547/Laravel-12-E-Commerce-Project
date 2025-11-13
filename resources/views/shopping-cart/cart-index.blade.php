@@ -100,7 +100,7 @@
                 @endforeach
             </tbody>
           </table>
-          <div class="cart-table-footer">
+          {{-- <div class="cart-table-footer">
             <form action="#" class="position-relative bg-body">
               <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code">
               <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
@@ -111,33 +111,80 @@
               @method('DELETE')
             <button class="btn btn-light" type="submit">CLEAR CART</button>
             </form>
-          </div>
+          </div> --}}
+
+          <div class="cart-table-footer">
+  <form action="{{ route('cart.applyCoupon') }}" method="POST" class="position-relative bg-body">
+    @csrf
+    <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code"
+           value="{{ session('coupon')['code'] ?? '' }}">
+    @if(session()->has('coupon'))
+      <button type="submit" disabled class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4 text-success">
+        Applied
+      </button>
+    @else
+      <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit" value="APPLY COUPON">
+    @endif
+  </form>
+
+  @if(session()->has('coupon'))
+  <form action="{{ route('cart.removeCoupon') }}" method="POST" style="display:inline;">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-sm btn-danger mt-2">Remove Coupon</button>
+  </form>
+  @endif
+
+  <form action="{{ route('cart.empty')}}" method="post">
+    @csrf
+    @method('DELETE')
+    <button class="btn btn-light" type="submit">CLEAR CART</button>
+  </form>
+</div>
+
         </div>
         <div class="shopping-cart__totals-wrapper">
           <div class="sticky-content">
-            <div class="shopping-cart__totals">
-              <h3>Cart Totals</h3>
-              <table class="cart-totals">
-                <tbody>
-                  <tr>
-                    <th>Subtotal</th>
-                    <td>${{ Cart::instance('cart')->subTotal() }}</td>
-                  </tr>
-                  <tr>
+       <div class="shopping-cart__totals">
+  <h3>Cart Totals</h3>
+  <table class="cart-totals">
+    <tbody>
+      <tr>
+        <th>Subtotal</th>
+        <td>${{ number_format($subtotal, 2) }}</td>
+      </tr>
+      <tr>
+        <th>Discount</th>
+        <td>
+          @if(session()->has('coupon'))
+            -${{ number_format($discount, 2) }}
+            <br>
+            <small>Coupon: <strong>{{ session('coupon')['code'] }}</strong></small>
+          @else
+            $0.00
+          @endif
+        </td>
+      </tr>
+      <tr>
+        <th>Subtotal After Discount</th>
+        <td>${{ number_format($subtotalAfterDiscount, 2) }}</td>
+      </tr>
+      <tr>
                     <th>Shipping</th>
                     <td>Free</td>
                   </tr>
-                  <tr>
-                    <th>VAT</th>
-                    <td>${{ Cart::instance('cart')->tax() }}</td>
-                  </tr>
-                  <tr>
-                    <th>Total</th>
-                    <td>${{ Cart::instance('cart')->total()  }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <tr>
+        <th>VAT (15%)</th>
+        <td>${{ number_format($vat, 2) }}</td>
+      </tr>
+      <tr>
+        <th>Total</th>
+        <td><strong>${{ number_format($total, 2) }}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
             <div class="mobile_fixed-btn_wrapper">
               <div class="button-wrapper container">
                 <a href="checkout.html" class="btn btn-primary btn-checkout">PROCEED TO CHECKOUT</a>

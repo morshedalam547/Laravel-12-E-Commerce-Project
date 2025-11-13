@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\CouponController;
+
 
 // Admin Dashboard (only for admin)
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -49,10 +48,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-//Coupons Resource Routes
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::resource('coupons', CouponController::class);
-});
 
 
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\Admin\CouponController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -36,10 +37,15 @@ Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, '
 
 
 
+//Coupons Resource Routes
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('coupons', CouponController::class);
+});
 
-
-
-
+//coupon Apply Route
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
+Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
 
 
 
