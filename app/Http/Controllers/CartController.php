@@ -72,12 +72,20 @@ class CartController extends Controller
     }
 
     // 🛒 অন্যান্য cart ফাংশনগুলো (add, update, remove, etc.)
-    public function add_to_cart(Request $request)
-    {
-        Cart::instance('cart')->add($request->id, $request->name, $request->quantity, $request->price)
-            ->associate('App\Models\Product');
-        return back();
-    }
+public function add_to_cart(Request $request)
+{
+    Cart::instance('cart')->add([
+        'id'    => $request->id,
+        'name'  => $request->name,
+        'qty'   => $request->quantity,
+        'price' => $request->price,
+        'options' => [
+            'product_name' => $request->name,
+        ]
+    ])->associate('App\Models\Product');
+
+    return back();
+}
 
 
 
@@ -104,11 +112,11 @@ class CartController extends Controller
     }
 
 
-    
     public function empty_cart()
     {
         Cart::instance('cart')->destroy();
         session()->forget('coupon');
         return back();
     }
+
 }

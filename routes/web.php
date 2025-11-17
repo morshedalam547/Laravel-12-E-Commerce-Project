@@ -8,6 +8,8 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CheckoutController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -21,6 +23,12 @@ Route::middleware('auth')->group(function () {
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/product/{product_slug}', [ShopController::class, 'product_details'])->name('product.details');
 
+//Wishlist Route
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+Route::get('/wishlist/add/{product_id}', [WishlistController::class, 'store'])->name('wishlist.add');
+Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+
 //cart Route
 Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add',[CartController::class,'add_to_cart'])->name('cart.add');
@@ -29,23 +37,20 @@ Route::put('/cart/decrease-Quantity/{rowId}',[CartController::class,'decrease_ca
 Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
 Route::delete('/cart/clear/', [CartController::class, 'empty_cart'])->name('cart.empty');
 
-//Wishlist Route
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
-Route::get('/wishlist/add/{product_id}', [WishlistController::class, 'store'])->name('wishlist.add');
-Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
-Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
-
-
-
 //Coupons Resource Routes
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('coupons', CouponController::class);
 });
 
 //coupon Apply Route
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
 Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
+
+//Shipping Checkout Routes
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/order-confirmation/{order_id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
+
 
 
 
