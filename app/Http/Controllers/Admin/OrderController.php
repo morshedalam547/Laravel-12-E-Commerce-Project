@@ -38,17 +38,49 @@ public function orderDetails($id)
 
 
 
+// public function updateStatus(Request $request, $id)
+// {
+//     $request->validate([
+//         'status' => 'required|in:ordered,processing,delivered,canceled',
+//     ]);
+
+//     $order = Order::findOrFail($id);
+//     $order->status = $request->status;
+//     $order->save();
+
+//     return back()->with('success', 'Order status updated successfully!');
+// }
+
+
 public function updateStatus(Request $request, $id)
 {
     $request->validate([
-        'status' => 'required|in:ordered,processing,delivered,canceled',
+        'status' => 'required|string'
     ]);
 
     $order = Order::findOrFail($id);
-    $order->status = $request->status;
+
+    $newStatus = strtolower($request->status);
+    $order->status = $newStatus;
+
+    if ($newStatus === 'delivered') {
+        $order->delivered_date = now();
+        $order->canceled_date = null;
+    }
+
+    if ($newStatus === 'canceled') {
+        $order->canceled_date = now();
+        $order->delivered_date = null;
+    }
+
+    if (in_array($newStatus, ['ordered', 'processing'])) {
+        $order->delivered_date = null;
+    
+    }
+
     $order->save();
 
-    return back()->with('success', 'Order status updated successfully!');
+    return back()->with('success', 'Order status updated successfully.');
 }
 
 

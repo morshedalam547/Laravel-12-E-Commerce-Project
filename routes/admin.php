@@ -43,33 +43,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Orders Routes
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.orders.index');
-   Route::get('/admin/orders/{id}/details', [OrderController::class,'orderDetails'])->name('admin.orders.details');
-    
-
-
-
-
-Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])
+    Route::get('/admin/orders/{id}/details', [OrderController::class,'orderDetails'])->name('admin.orders.details');
+    Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])
       ->name('admin.orders.updateStatus');
 
 
 
 
-});
 
 
 
 
 
 
-// User Dashboard (only for normal user)
-Route::middleware(['auth', 'user'])->group(function () {
-
-    Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
-
-
-
+      
 
 
 });
+
+
+
 

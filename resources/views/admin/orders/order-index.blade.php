@@ -77,12 +77,13 @@
         <span class="badge bg-secondary text-white px-3 py-2">{{ $order->status }}</span>
     @endif
 </td>
-            <td class="text-center">{{ $order->created_at->format('Y-m-d H:i:s') }}</td>
+            <td class="text-center">{{ $order->created_at->format('F j, Y h:i A') }}</td>
 
             <td class="text-center">{{ $order->items_count }}</td>
 
             <td class="text-center">
-                {{ $order->delivered_date ? $order->delivered_date->format('Y-m-d') : '-' }}
+                  {{ $order->delivered_date?->format('F j, Y h:i A') }}
+
             </td>
             
 
@@ -103,18 +104,20 @@
 
                                             </table>
                                         </div>
+                                         <div class="divider"></div>
+                                         <!-- Pagination -->
+                         <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
+                       {{ $orders->links('pagination::bootstrap-5') }}
+                    </div>
                                     </div>
-                                    <div class="divider"></div>
-                                    <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
-
-                                    </div>
+                                   
+                                  
                                 </div>
                             </div>
                         </div>
 
 
-                        <div class="bottom-page">
-                            <div class="body-text">Copyright © 2024 SurfsideMedia</div>
-                        </div>
+
+                        
            
 @endsection

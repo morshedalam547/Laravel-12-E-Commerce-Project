@@ -1,14 +1,17 @@
 <?php
 
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CheckoutController;
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -50,6 +53,23 @@ Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->n
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/order-confirmation/{order_id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
+
+
+// user order routes
+Route::middleware(['auth', 'user'])->group(function () {
+
+    Route::get('/user/dashboard', [UserController::class, 'userDashboard'])->name('user.dashboard');
+    Route::get('/my-orders', [UserController::class, 'index'])->name('user.orders');
+    Route::get('/my-orders/{order}', [UserController::class, 'show'])->name('user.orders.show');
+    Route::put('my-orders/{order}/cancel', [UserController::class,'cancelOrder'])->name('user.orders.cancel');
+
+
+
+
+
+
+});
+
 
 
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
+    
     public function handle($request, Closure $next)
     {
         // যদি ইউজার লগইন করা থাকে এবং তার role 'admin' হয়
