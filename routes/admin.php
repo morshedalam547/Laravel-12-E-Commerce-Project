@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\Admin\SliderController;
 
 
 // Admin Dashboard (only for admin)
@@ -44,8 +45,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Orders Routes
     Route::get('/admin/orders',[OrderController::class,'index'])->name('admin.orders.index');
     Route::get('/admin/orders/{id}/details', [OrderController::class,'orderDetails'])->name('admin.orders.details');
-    Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])
-      ->name('admin.orders.updateStatus');
+    Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
+    // Silders Routes
+   Route::get('/sliders', [SliderController::class, 'index'])->name('admin.sliders');
+    Route::get('/sliders/add', [SliderController::class, 'create'])->name('admin.add.slider');
+    Route::post('/sliders/store', [SliderController::class, 'store'])->name('admin.slider.store');
+        Route::get('slider/{id}/edit', [SliderController::class,'edit'])->name('slider.edit');
+    Route::put('slider/{id}/update', [SliderController::class,'update'])->name('slider.update');
+    Route::delete('/sliders/{id}', [SliderController::class, 'destroy'])->name('admin.slider.delete');
 
 
 
@@ -55,8 +63,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 
-
-      
 
 
 });
