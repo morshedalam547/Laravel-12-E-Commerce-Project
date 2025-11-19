@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\CheckoutController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+// Route::get('/', [HomeController::class, 'homeCategory']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

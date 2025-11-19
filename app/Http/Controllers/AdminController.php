@@ -503,6 +503,7 @@ public function updateProduct(Request $request, $id)
     $product->brand_id = $request->brand_id;
     $product->regular_price = $request->regular_price;
     $product->sale_price = $request->sale_price;
+    $product->featured = $request->featured ?? 0;
 
   
     $product->description = $request->description ?? $product->description;
