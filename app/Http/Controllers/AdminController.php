@@ -11,13 +11,95 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use App\Models\Order;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-   public function index(){
-        return view('admin.index');
+public function index()
+{
+    // Basic Counts
+    $totalOrders = Order::count();
+    $processingOrders = Order::where('status', 'ordered')->count();
+    $canceledOrder = Order::where('status', 'canceled')->count();
+    $deliveredOrder = Order::where('status', 'delivered')->count();
+
+    // Amounts
+    $total = Order::sum('subtotal');
+    $canceledAmount = Order::where('status', 'canceled')->sum('total');
+    $deliveredAmount = Order::where('status', 'delivered')->sum('subtotal');
+    $processingAmount = Order::where('status', 'processing')->sum('subtotal');
+    $totalRevenue = Order::sum('subtotal');
+    $totalOrderAmount = Order::sum('total');
+
+    // Recent Orders
+    $recentOrders = Order::latest()->take(10)->get();
+
+
+    // ================================
+    //       12 MONTH CHART DATA
+    // ================================
+
+    // Total revenue (all status)
+    $monthlyTotal = Order::selectRaw('MONTH(created_at) as month, SUM(total) as total')
+        ->groupBy('month')
+        ->pluck('total', 'month')
+        ->toArray();
+
+    // Processing
+    $monthlyProcessing = Order::where('status', 'ordered')
+        ->selectRaw('MONTH(created_at) as month, SUM(total) as total')
+        ->groupBy('month')
+        ->pluck('total', 'month')
+        ->toArray();
+
+    // Delivered
+    $monthlyDelivered = Order::where('status', 'delivered')
+        ->selectRaw('MONTH(created_at) as month, SUM(total) as total')
+        ->groupBy('month')
+        ->pluck('total', 'month')
+        ->toArray();
+
+    // Canceled
+    $monthlyCanceled = Order::where('status', 'canceled')
+        ->selectRaw('MONTH(created_at) as month, SUM(total) as total')
+        ->groupBy('month')
+        ->pluck('total', 'month')
+        ->toArray();
+
+    // Create array for 12 months
+    $months = range(1, 12);
+
+    foreach ($months as $m) {
+        $monthlyTotalArray[]      = $monthlyTotal[$m] ?? 0;
+        $monthlyProcessingArray[] = $monthlyProcessing[$m] ?? 0;
+        $monthlyDeliveredArray[]  = $monthlyDelivered[$m] ?? 0;
+        $monthlyCanceledArray[]   = $monthlyCanceled[$m] ?? 0;
     }
+
+    return view('admin.index', compact(
+        'totalOrders',
+        'processingOrders',
+        'canceledOrder',
+        'canceledAmount',
+        'deliveredOrder',
+        'deliveredAmount',
+        'processingAmount',
+        'total',
+        'totalRevenue',
+        'totalOrderAmount',
+        'recentOrders',
+
+        // Chart Arrays
+        'monthlyTotalArray',
+        'monthlyProcessingArray',
+        'monthlyDeliveredArray',
+        'monthlyCanceledArray'
+    ));
+}
+
+
+
 
 public function brands(){
     $brands =Brand::orderBy('id','DESC')->paginate(7);

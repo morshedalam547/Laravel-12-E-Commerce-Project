@@ -48,12 +48,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 
     // Silders Routes
-   Route::get('/sliders', [SliderController::class, 'index'])->name('admin.sliders');
+    Route::get('/sliders', [SliderController::class, 'index'])->name('admin.sliders');
     Route::get('/sliders/add', [SliderController::class, 'create'])->name('admin.add.slider');
     Route::post('/sliders/store', [SliderController::class, 'store'])->name('admin.slider.store');
-        Route::get('slider/{id}/edit', [SliderController::class,'edit'])->name('slider.edit');
+    Route::get('slider/{id}/edit', [SliderController::class,'edit'])->name('slider.edit');
     Route::put('slider/{id}/update', [SliderController::class,'update'])->name('slider.update');
     Route::delete('/sliders/{id}', [SliderController::class, 'destroy'])->name('admin.slider.delete');
+
+
+    
 
 
 
