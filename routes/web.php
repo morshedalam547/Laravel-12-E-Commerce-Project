@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\CouponController;
@@ -65,13 +66,11 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/my-orders/{order}', [UserController::class, 'show'])->name('user.orders.show');
     Route::put('my-orders/{order}/cancel', [UserController::class,'cancelOrder'])->name('user.orders.cancel');
 
-
-
-
-
-
 });
 
+  
+    Route::get('/contact',[ContactController::class,'contact'])->name('contact.page');
+    Route::post('/contact/submit/',[ContactController::class, 'store'])->name('contact.submit');
 
 
 

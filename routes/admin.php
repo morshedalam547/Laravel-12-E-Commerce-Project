@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\Admin\SliderController;
 
@@ -54,6 +55,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('slider/{id}/edit', [SliderController::class,'edit'])->name('slider.edit');
     Route::put('slider/{id}/update', [SliderController::class,'update'])->name('slider.update');
     Route::delete('/sliders/{id}', [SliderController::class, 'destroy'])->name('admin.slider.delete');
+
+
+    // Contact Message Routes
+    Route::get('/admin/contacts',[ContactController::class, 'show'])->name('admin.contacts.show');
+    Route::delete('/contact/delete/{contact}',[ContactController::class, 'destroy'])->name('admin.contacts.delete');
+
 
 
     

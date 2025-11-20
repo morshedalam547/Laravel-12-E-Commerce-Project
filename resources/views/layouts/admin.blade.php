@@ -157,7 +157,7 @@
                                     </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="users.html" class="">
+                                    <a href="{{ route('admin.contacts.show') }}" class="">
                                         <div class="icon"><i class="icon-mail"></i></div>
                                         <div class="text">Message</div>
                                     </a>
