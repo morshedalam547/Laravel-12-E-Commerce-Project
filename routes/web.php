@@ -13,11 +13,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CheckoutController;
 
-
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
-// Route::get('/', [HomeController::class, 'homeCategory']);
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,22 +22,22 @@ Route::middleware('auth')->group(function () {
 });
 
 // Shop Route
-Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/product/{product_slug}', [ShopController::class, 'product_details'])->name('product.details');
+    Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+    Route::get('/product/{product_slug}', [ShopController::class, 'product_details'])->name('product.details');
 
 //Wishlist Route
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
-Route::get('/wishlist/add/{product_id}', [WishlistController::class, 'store'])->name('wishlist.add');
-Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
-Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+    Route::get('/wishlist/add/{product_id}', [WishlistController::class, 'store'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+    Route::post('/wishlist/move-to-cart/{product_id}', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
 
 //cart Route
-Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add',[CartController::class,'add_to_cart'])->name('cart.add');
-Route::put('/cart/increase-Quantity/{rowId}',[CartController::class,'increase_cart_quantity'])->name('cart.qty.increase');
-Route::put('/cart/decrease-Quantity/{rowId}',[CartController::class,'decrease_cart_quantity'])->name('cart.qty.decrease');
-Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
-Route::delete('/cart/clear/', [CartController::class, 'empty_cart'])->name('cart.empty');
+    Route::get('/cart',[CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add',[CartController::class,'add_to_cart'])->name('cart.add');
+    Route::put('/cart/increase-Quantity/{rowId}',[CartController::class,'increase_cart_quantity'])->name('cart.qty.increase');
+    Route::put('/cart/decrease-Quantity/{rowId}',[CartController::class,'decrease_cart_quantity'])->name('cart.qty.decrease');
+    Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::delete('/cart/clear/', [CartController::class, 'empty_cart'])->name('cart.empty');
 
 //Coupons Resource Routes
 Route::prefix('admin')->name('admin.')->group(function() {
@@ -49,14 +45,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
 });
 
 //coupon Apply Route
-Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
-Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
+    Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
+    Route::delete('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.removeCoupon');
 
-//Shipping Checkout Routes
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-Route::get('/order-confirmation/{order_id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
-
+    //Shipping Checkout Routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/order-confirmation/{order_id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
 
 // user order routes
 Route::middleware(['auth', 'user'])->group(function () {
@@ -68,9 +63,12 @@ Route::middleware(['auth', 'user'])->group(function () {
 
 });
 
-  
+//   contact Routs
     Route::get('/contact',[ContactController::class,'contact'])->name('contact.page');
     Route::post('/contact/submit/',[ContactController::class, 'store'])->name('contact.submit');
+
+// Welcome Page Search Routes
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 
 

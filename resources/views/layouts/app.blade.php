@@ -289,7 +289,7 @@
       <div class="container">
         <form action="#" method="GET" class="search-field position-relative mt-4 mb-3">
           <div class="position-relative">
-            <input class="search-field__input w-100 border rounded-1" type="text" name="search-keyword"
+            <input class="search-field__input w-100 border rounded-1" type="text" name="search-keyword" id="search-keyword"
               placeholder="Search products" />
             <button class="btn-icon search-popup__submit pb-0 me-2" type="submit">
               <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -300,9 +300,7 @@
             <button class="btn-icon btn-close-lg search-popup__reset pb-0 me-2" type="reset"></button>
           </div>
 
-          <div class="position-absolute start-0 top-100 m-0 w-100">
-            <div class="search-result"></div>
-          </div>
+     
         </form>
       </div>
 
@@ -417,6 +415,9 @@
           </ul>
         </nav>
 
+
+
+        {{--Welcome Live search option --}}
         <div class="header-tools d-flex align-items-center">
           <div class="header-tools__item hover-container">
             <div class="js-hover__open position-relative">
@@ -428,41 +429,36 @@
                 <i class="btn-icon btn-close-lg"></i>
               </a>
             </div>
-
+  
             <div class="search-popup js-hidden-content">
-              <form action="#" method="GET" class="search-field container">
-                <p class="text-uppercase text-secondary fw-medium mb-4">What are you looking for?</p>
-                <div class="position-relative">
-                  <input class="search-field__input search-popup__input w-100 fw-medium" type="text"
-                    name="search-keyword" placeholder="Search products" />
-                  <button class="btn-icon search-popup__submit" type="submit">
-                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_search" />
-                    </svg>
-                  </button>
-                  <button class="btn-icon btn-close-lg search-popup__reset" type="reset"></button>
-                </div>
+    <form action="#" method="GET" class="search-field container" id="liveSearchForm">
+        <p class="text-uppercase text-secondary fw-medium mb-4">What are you looking for?</p>
+        <div class="position-relative">
+            <input class="search-field__input search-popup__input w-100 fw-medium"
+                type="text" name="search-keyword" id="searchInput"
+                placeholder="Search products" autocomplete="off">
 
-                <div class="search-popup__results">
-                  <div class="sub-menu search-suggestion">
-                    <h6 class="sub-menu__title fs-base">Quicklinks</h6>
-                    <ul class="sub-menu__list list-unstyled">
-                      <li class="sub-menu__item"><a href="shop2.html" class="menu-link menu-link_us-s">New Arrivals</a>
-                      </li>
-                      <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Dresses</a></li>
-                      <li class="sub-menu__item"><a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
-                      </li>
-                      <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Footwear</a></li>
-                      <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Sweatshirt</a></li>
-                    </ul>
-                  </div>
+            <button class="btn-icon search-popup__submit" type="submit">
+                <svg class="d-block" width="20" height="20">
+                    <use href="#icon_search"></use>
+                </svg>
+            </button>
 
-                  <div class="search-result row row-cols-5"></div>
-                </div>
-              </form>
-            </div>
+            <button class="btn-icon btn-close-lg search-popup__reset" type="reset"></button>
+        </div>
+
+         <div class="search-popup__results">
+            <ul id="box-content-search">
+
+            </ul>
+           
           </div>
+            <!-- Dynamic Search Result -->
+            <div class="search-result row row-cols-5" id="searchResult"></div>
+        </div>
+    </form>
+</div>
+</div>
 
 
 
@@ -487,13 +483,6 @@
             </a>
           </div>
           @endguest 
-
-          {{-- <a href="{{ route('wishlist') }}" class="header-tools__item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <use href="#icon_heart" />
-            </svg>
-          </a> --}}
-
 
               @php
                   $wishlistCount = \App\Models\Wishlist::where('session_id', session()->getId())->count();
@@ -687,15 +676,71 @@
 
   <div id="scrollTop" class="visually-hidden end-0"></div>
   <div class="page-overlay"></div>
+<!-- Core JS -->
+<script src="{{ asset('assets/js/plugins/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap-slider.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/swiper.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/countdown.js') }}"></script>
 
-  <script src="{{ asset('assets/js/plugins/jquery.min.js') }}"></script>
-  <script src="{{ asset('assets/js/plugins/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/js/plugins/bootstrap-slider.min.js') }}"></script>
-  <script src="{{ asset('assets/js/plugins/swiper.min.js') }}"></script>
-  <script src="{{ asset('assets/js/plugins/countdown.js') }}"></script>
-  <script src="{{ asset('assets/js/theme.js') }}"> </script>
-  @stack("scripts")
+<script>
+  // welcome live search Script
+$(function () {
+
+    $("#searchInput").on("keyup", function () {
+        var searchQuery = $(this).val();
+
+        if (searchQuery.length > 2) {
+
+            $.ajax({
+                type: "GET",
+                url: "{{ route('search') }}",
+                data: { 'search-keyword': searchQuery },
+                dataType: "json",
+
+                success: function (data) {
+
+                    $("#box-content-search").html('');
+
+                    $.each(data, function (index, product) {
+
+                        var url = "{{ route('product.details', ['product_slug' => 'product_slug_pls']) }}";
+                        var link = url.replace('product_slug_pls', product.slug);
+
+                        $("#box-content-search").append(`
+                            <li class="search-popup__result-item d-flex align-items-center mb-3">
+                                <a href="${link}" class="d-flex align-items-center w-100">
+                                    <div class="search-popup__result-image me-3">
+                                        <img src="{{ asset('uploads/products/thumbnails') }}/${product.image}" alt="${product.name}"   style="width: 50px; height: 50px; object-fit: cover;"/>
+                                    </div>
+                                    <div class="search-popup__result-info">
+                                        <h6 class="search-popup__result-title mb-1">${product.name}</h6>
+                                       
+                                    </div>
+                                </a>
+                            </li>
+                        `);
+                    });
+
+                }
+            });
+
+        } else {
+            $("#box-content-search").html('');
+        }
+
+    });
+
+});
+</script>
+
+
+<script src="{{ asset('assets/js/theme.js') }}"></script>
+
+@stack("scripts")
+
+<!-- Live Search Script -->
+
+
 </body>
-
-
-</html>'
+</html>

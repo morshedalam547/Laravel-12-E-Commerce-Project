@@ -27,6 +27,23 @@ class HomeController extends Controller
     return view('welcome', compact('sliders','categories','hotDeals','latestProduct'));
 }
 
+public function search(Request $request)
+{
+    $keyword = $request->input('search-keyword');
+
+    // if (!$keyword) {
+    //     return response()->json([]);
+    // }
+
+    $products = Product::where('name', 'LIKE', "%{$keyword}%")
+        // ->orWhere('short_description', 'LIKE', "%{$keyword}%")
+        // ->orWhere('description', 'LIKE', "%{$keyword}%")
+        // ->select('id', 'name', 'slug', 'image')
+        // ->limit(10)  
+        ->get()->take(8);
+
+    return response()->json($products);
+}
 
 
 
