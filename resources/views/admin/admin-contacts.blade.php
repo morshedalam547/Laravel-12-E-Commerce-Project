@@ -2,16 +2,12 @@
 
 @section('content')
 <div class="main-content-inner">
-                    @if(session('danger'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Deleted!</strong> {{ session('danger') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+
         <div class="main-content-wrap">
             <div class="flex items-center flex-wrap justify-between gap-5 mb-6">
 
-                <h3>User Message</h3>
+                <h3>User Message</h3><br>
+                                  
                 <ul class="breadcrumbs flex items-center flex-wrap gap-2">
                     <li><a href="{{ route('admin.dashboard') }}">
                             <div class="text-tiny">Dashboard</div>
@@ -20,6 +16,13 @@
                     
                 </ul>
             </div>
+ @if(session('danger'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>danger!</strong> {{ session('danger') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
    <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead>

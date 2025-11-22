@@ -24,4 +24,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })
-    ->create();
+
+    
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            // '/*',
+            '/contact/submit'
+             // <-- exclude this route
+        ]);
+    })->create();
+

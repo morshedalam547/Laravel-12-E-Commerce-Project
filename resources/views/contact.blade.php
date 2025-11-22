@@ -16,7 +16,7 @@
       <div class="mw-930">
         <div class="contact-us__form">
           <form action="{{ route('contact.submit') }}" name="contact-us-form" class="needs-validation" novalidate="" method="POST">
-            @csrf
+            {{-- @csrf --}}
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>success!</strong> {{ session('success') }}

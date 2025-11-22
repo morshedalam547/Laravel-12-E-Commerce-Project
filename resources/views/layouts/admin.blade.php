@@ -199,7 +199,7 @@
                                 </div>
 
 
-                                <form class="form-search flex-grow">
+                                {{-- <form class="form-search flex-grow">
                                     <fieldset class="name">
                                         <input type="text" placeholder="Search here..." class="show-search" name="name"
                                             tabindex="2" value="" aria-required="true" required="">
@@ -325,7 +325,23 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </form>
+                                </form> --}}
+
+                                <form class="form-search flex-grow">
+    <fieldset class="name">
+        <input type="text" placeholder="Search here..." class="show-search" id="adminSearchInput" name="search"
+            tabindex="2" aria-required="true" required>
+    </fieldset>
+    <div class="button-submit">
+        <button type="submit"><i class="icon-search"></i></button>
+    </div>
+    <div class="box-content-search" id="box-content-search">
+        <ul class="mb-24" id="searchResults">
+            <!-- Dynamic results will appear here -->
+        </ul>
+    </div>
+</form>
+
 
                             </div>
                             <div class="header-grid">
@@ -487,7 +503,59 @@
     <script src="{{ asset('js/sweetalert.min.js')}}"></script>
     <script src="{{ asset('js/apexcharts/apexcharts.js')}}"></script>
     <script src="{{ asset('js/main.js')}}"></script>
-  
+
+ <script>
+  // welcome live search Script
+$(function () {
+
+    $("#adminSearchInput").on("keyup", function () {
+        var searchQuery = $(this).val();
+
+        if (searchQuery.length > 2) {
+
+            $.ajax({
+                type: "GET",
+                url: "{{ route('admin.search') }}",
+                data: { 'search-keyword': searchQuery },
+                dataType: "json",
+
+                success: function (data) {
+
+                    $("#box-content-search").html('');
+
+                    $.each(data, function (index, product) {
+
+                        var url = "{{ route('admin.products.edit', ['id'=>'product_id']) }}";
+                        var link = url.replace('product_id', product.id);
+
+                        $("#box-content-search").append(`
+                            <li class="search-popup__result-item d-flex align-items-center mb-3">
+                                <a href="${link}" class="d-flex align-items-center w-100">
+                                    <div class="search-popup__result-image me-3">
+                                        <img src="{{ asset('uploads/products/thumbnails') }}/${product.image}" alt="${product.name}"   style="width: 50px; height: 50px; object-fit: cover;"/>
+                                    </div>
+                                    <div class="search-popup__result-info">
+                                        <h6 class="search-popup__result-title mb-1">${product.name}</h6>
+                                       
+                                    </div>
+                                </a>
+                            </li>
+                        `);
+                    });
+
+                }
+            });
+
+        } else {
+            $("#box-content-search").html('');
+        }
+
+    });
+
+});
+</script>
+
+
     @stack("scripts")
 </body>
 

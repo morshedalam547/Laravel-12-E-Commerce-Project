@@ -7,19 +7,37 @@ use Illuminate\Support\Facades\Auth;
 
 class UserMiddleware
 {
-    public function handle($request, Closure $next)
-    {
-        // যদি ইউজার লগইন করা থাকে এবং তার role 'user' হয়
-        if (Auth::check() && Auth::user()->role === 'user') {
-            return $next($request);
-        }
 
-        // যদি ইউজার লগইন করা থাকে কিন্তু admin হয়
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        // যদি লগইন করা না থাকে
+ public function handle($request, Closure $next)
+{
+    if (!auth()->check()) {
         return redirect()->route('login');
     }
+
+    if (auth()->user()->role !== 'user') {
+        return abort(403, 'Unauthorized');
+    }
+
+    return $next($request);
+}
+
+
+
+
+
+    // public function handle($request, Closure $next)
+    // {
+    //     // যদি ইউজার লগইন করা থাকে এবং তার role 'user' হয়
+    //     if (Auth::check() && Auth::user()->role === 'user') {
+    //         return $next($request);
+    //     }
+
+    //     // যদি ইউজার লগইন করা থাকে কিন্তু admin হয়
+    //     if (Auth::check() && Auth::user()->role === 'admin') {
+    //         return redirect()->route('admin.dashboard');
+    //     }
+
+    //     // যদি লগইন করা না থাকে
+    //     return redirect()->route('login');
+    // }
 }

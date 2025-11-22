@@ -1,14 +1,11 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\Admin\SliderController;
 
-
-// Admin Dashboard (only for admin)
+  // Admin Dashboard (only for admin)
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
@@ -20,7 +17,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/brands/{id}', [AdminController::class, 'update'])->name('brands.update');
     Route::delete('/brands/{id}/delete', [AdminController::class, 'delete'])->name('brands.delete');
 
-//category Routes
+  //category Routes
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
     Route::get('/admin/category/add',[AdminController::class, 'category_add'])->name('admin.categoryAdd');
     Route::post('/admin/category/store',[AdminController::class, 'category_store'])->name('admin.categoryStore');
@@ -32,7 +29,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
   // সব products দেখার জন্য
     Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
 
-    // Add Product form দেখানোর জন্য
+  // Add Product form দেখানোর জন্য
     Route::get('/admin/products/add', [AdminController::class, 'products_add'])->name('admin.products.add');
 
     // Product save করার জন্য (POST)
@@ -48,7 +45,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/orders/{id}/details', [OrderController::class,'orderDetails'])->name('admin.orders.details');
     Route::post('/admin/orders/update-status/{id}', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 
-    // Silders Routes
+    //Welcome Page Sliders Routes
     Route::get('/sliders', [SliderController::class, 'index'])->name('admin.sliders');
     Route::get('/sliders/add', [SliderController::class, 'create'])->name('admin.add.slider');
     Route::post('/sliders/store', [SliderController::class, 'store'])->name('admin.slider.store');
@@ -56,14 +53,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('slider/{id}/update', [SliderController::class,'update'])->name('slider.update');
     Route::delete('/sliders/{id}', [SliderController::class, 'destroy'])->name('admin.slider.delete');
 
-
     // Contact Message Routes
     Route::get('/admin/contacts',[ContactController::class, 'show'])->name('admin.contacts.show');
     Route::delete('/contact/delete/{contact}',[ContactController::class, 'destroy'])->name('admin.contacts.delete');
 
 
 
-    
+    Route::get('/admin/search', [AdminController::class, 'search'])->name('admin.search');
 
 
 

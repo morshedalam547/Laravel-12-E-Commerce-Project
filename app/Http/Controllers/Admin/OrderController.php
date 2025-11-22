@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\order;
-
+use App\Mail\OrderStatusMail;
+use Illuminate\Support\Facades\Mail;
 class OrderController extends Controller
 {  // Search
          public function index(Request $request)
@@ -58,29 +59,31 @@ public function updateStatus(Request $request, $id)
         'status' => 'required|string'
     ]);
 
-    $order = Order::findOrFail($id);
+    $order = Order::with('user')->findOrFail($id);
 
     $newStatus = strtolower($request->status);
     $order->status = $newStatus;
 
+    // delivered হলে date
     if ($newStatus === 'delivered') {
         $order->delivered_date = now();
         $order->canceled_date = null;
     }
 
+    // canceled হলে date
     if ($newStatus === 'canceled') {
         $order->canceled_date = now();
         $order->delivered_date = null;
     }
 
-    if (in_array($newStatus, ['ordered', 'processing'])) {
-        $order->delivered_date = null;
-    
-    }
-
     $order->save();
 
-    return back()->with('success', 'Order status updated successfully.');
+    // 🚀 EMAIL SEND TO USER LOGIN EMAIL
+    if ($order->user && $order->user->email) {
+        Mail::to($order->user->email)->send(new OrderStatusMail($order));
+    }
+
+    return back()->with('success', 'Order status updated & Email sent!');
 }
 
 

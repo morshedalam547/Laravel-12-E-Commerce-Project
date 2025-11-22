@@ -1,7 +1,4 @@
 <?php
-
-
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
@@ -12,8 +9,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CheckoutController;
+use App\Http\Controllers\Middleware\VerifyCsrfToken;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -65,7 +63,7 @@ Route::middleware(['auth', 'user'])->group(function () {
 
 //   contact Routs
     Route::get('/contact',[ContactController::class,'contact'])->name('contact.page');
-    Route::post('/contact/submit/',[ContactController::class, 'store'])->name('contact.submit');
+    Route::post('/contact/submit',[ContactController::class, 'store'])->name('contact.submit');
 
 // Welcome Page Search Routes
     Route::get('/search', [HomeController::class, 'search'])->name('search');
