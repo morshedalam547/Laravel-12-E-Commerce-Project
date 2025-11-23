@@ -28,8 +28,6 @@ return Application::configure(basePath: dirname(__DIR__))
     
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            // '/*',
-            '/contact/submit'
             '/*',
             // '/contact/submit'
              // <-- exclude this route
