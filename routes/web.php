@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SSLController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
@@ -67,11 +68,18 @@ Route::middleware(['auth', 'user'])->group(function () {
 
 // Welcome Page Search Routes
     Route::get('/search', [HomeController::class, 'search'])->name('search');
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 
 
 
-
+//SSl Payment Getway Route
+Route::post('/ssl-pay', [SslController::class, 'index'])->name('ssl.pay');
+Route::post('/pay-via-ajax', [SslController::class, 'payViaAjax']);
+Route::post('/ssl-success', [SslController::class, 'success']);
+Route::post('/ssl-fail', [SslController::class, 'fail']);
+Route::post('/ssl-cancel', [SslController::class, 'cancel']);
+Route::post('/ipn', [SslController::class, 'ipn']);
 
 
 require __DIR__.'/auth.php';
