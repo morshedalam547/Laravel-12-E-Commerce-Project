@@ -114,10 +114,11 @@
                     <div class="upload-image mb-16">
                         <div id="galleryPreview" class="flex flex-wrap gap-2 mb-3">
                             @if(!empty($product->images))
-                                @foreach(json_decode($product->images, true) as $img)
-                                    <img src="{{ asset('uploads/products/gallery/'.$img) }}" style="max-width:100px; margin:4px; border-radius:8px;">
-                                @endforeach
-                            @endif
+    @foreach($product->images as $img)
+        <img src="{{ asset('uploads/products/gallery/'.$img) }}" style="max-width:100px; margin:4px; border-radius:8px;">
+    @endforeach
+@endif
+
                         </div>
                         <div id="galUpload" class="item up-load">
                             <label class="uploadfile" for="gFile">

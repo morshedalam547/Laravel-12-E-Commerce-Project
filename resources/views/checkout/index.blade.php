@@ -168,7 +168,7 @@
     </section>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // Toggle payment buttons visually
@@ -185,7 +185,7 @@
             togglePaymentBtns();
             $('input[name="payment_method"]').on('change', togglePaymentBtns);
         });
-    </script>
+    </script> 
 
 </main>
 @endsection

@@ -77,13 +77,17 @@ class SslController extends Controller
         }
 
         // IF COD (NO SSL PAYMENT)
-        if ($request->payment_method == 'cod') {
+if ($request->payment_method == 'cod') {
 
-            Cart::instance('cart')->destroy();
-            session()->forget('coupon');
+    Cart::instance('cart')->destroy();
+    session()->forget('coupon');
 
-            return redirect('/my-orders')->with('success', 'Order placed successfully (Cash on Delivery).');
-        }
+    return redirect()
+        ->route('order.confirmation', $publicOrderId)
+        ->with('success', 'Order placed successfully (Cash on Delivery).');
+}
+
+        
 
         // ******** SSL PAYMENT ********
 
@@ -132,7 +136,7 @@ class SslController extends Controller
 
 
 
-public function success(Request $request)
+public function success()
 {
     
     

@@ -81,20 +81,21 @@
             </div>
         </div>
 
-        @if ($product->images)
-        <div class="mt-5">
-            <h5 class="fw-semibold mb-3">Gallery Images</h5>
-            <div class="row">
-                @foreach (json_decode($product->images) as $img)
-                    <div class="col-md-3 mb-3">
-                        <img src="{{ asset('uploads/products/gallery/' . $img) }}" 
-                             alt="Gallery Image" 
-                             class="img-fluid rounded-3 shadow-sm">
-                    </div>
-                @endforeach
+  @if(!empty($product->images))
+<div class="mt-5">
+    <h5 class="fw-semibold mb-3">Gallery Images</h5>
+    <div class="row">
+        @foreach ($product->images as $img)
+            <div class="col-md-3 mb-3">
+                <img src="{{ asset('uploads/products/gallery/' . $img) }}"
+                     alt="Gallery Image"
+                     class="img-fluid rounded-3 shadow-sm">
             </div>
-        </div>
-        @endif
+        @endforeach
+    </div>
+</div>
+@endif
+
 
 
     </div>

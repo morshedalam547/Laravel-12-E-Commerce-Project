@@ -471,8 +471,10 @@
                                             </div>
 
                                             {{-- Gallery Images --}}
-                                            @if(!empty($product->images))
-                                                @foreach(json_decode($product->images, true) as $galleryImage)
+                                         @if(!empty($product->images) && is_array($product->images))
+
+                                               @foreach($product->images as $galleryImage)
+
                                                     <div class="swiper-slide h-100 d-flex justify-content-center align-items-center">
                                                         <a href="{{ route('product.details', $product->slug) }}"
                                                             class="d-block h-80 w-80">

@@ -56,7 +56,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
 Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('/user/dashboard', [UserController::class, 'userDashboard'])->name('user.dashboard');
-    Route::get('/my-orders', [UserController::class, 'index'])->name('user.orders');
+    Route::get('/orders', [UserController::class, 'index'])->name('user.orders');
     Route::get('/my-orders/{order}', [UserController::class, 'show'])->name('user.orders.show');
     Route::put('my-orders/{order}/cancel', [UserController::class,'cancelOrder'])->name('user.orders.cancel');
 

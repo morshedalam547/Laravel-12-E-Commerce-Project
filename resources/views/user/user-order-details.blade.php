@@ -195,7 +195,7 @@
                                                          alt="{{ $item->product_name }}" width="50" class="rounded">
                                                 </div>
                                                 <div>
-                                                    <a href="{{ route('user.orders.show', $item->product_id) }}" target="_blank">
+                                                    <a href="{{ route('user.orders.show', $order->id)}}" target="_blank">
                                                         {{ $item->product_name }}
                                                     </a>
                                                 </div>
@@ -208,7 +208,7 @@
                                             <td class="text-center">{{ $item->options ?? '—' }}</td>
                                             <td class="text-center">{{ $item->return_status ?? 'No' }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('user.orders.show', $item->product_id) }}" target="_blank" class="btn btn-sm btn-primary">
+                                                <a href="{{route('user.orders.show', $order->id)}}" target="_blank" class="btn btn-sm btn-primary">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
